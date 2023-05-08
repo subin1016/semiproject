@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper 존재 -->
+
+<mapper namespace="Member">
+
+ 
+<!--
+create table members(
+	id varchar(50) primary key, 
+	pwd varchar(50) not null,
+	name varchar(50) not null,
+	bdate varchar(50) not null,     생년월일
+	phone varchar(50) unique,  		전화번호
+	email varchar(50) unique,
+);  -->
+
+
+<select id="allMember" resultType="mul.cam.a.dto.MemberDto">
+	select id, pwd, name, bdate, phone, email
+	from members
+</select>
+
+<!-- id 중복 확인 -->
+<!-- count(*)의 결과가 0보다 크면 id가 존재 -->
+<select id="idcheck" parameterType="String" resultType="Integer">
+	select count(*)
+	from members
+	where id=#{id}
+</select>
+
+<!-- 회원 가입 -->
+<insert id="addmember" parameterType="mul.cam.a.dto.MemberDto">
+	insert into members(id, pwd, name, bdate, phone, email)
+	values(#{id}, #{pwd}, #{name}, #{bdate}, #{phone}, #{email})
+</insert>
+
+<!-- 로그인 -->
+<select id="login" parameterType="mul.cam.a.dto.MemberDto"
+	resultType="mul.cam.a.dto.MemberDto">
+	select *
+	from members
+	where id=#{id} and pwd=#{pwd}
+</select>
+
+<!-- id 찾기 -->
+<select id="findId" parameterType="mul.cam.a.dto.MemberDto" resultType="mul.cam.a.dto.MemberDto">
+	select *
+	from members
+	where name=#{name} and email=#{email} and phone=#{phone}
+</select>
+
+<!-- pwd 찾기 -->
+<select id="findPwd" parameterType="mul.cam.a.dto.MemberDto" resultType="mul.cam.a.dto.MemberDto">
+	select *
+	from members
+	where id=#{id} and email=#{email} and phone=#{phone}
+</select>
+
+
+
+
+
+
+
+<!-- 찜하기 -->
+<insert id="addWant" parameterType="mul.cam.a.dto.WantDto">
+	insert into wantpackage(id, locid, seq, title, imgurl)
+	values(#{id}, #{locid}, #{seq}, #{title}, #{imgurl})
+</insert>
+
+
+
+
+
+
+<!-- 마이페이지 관련 -->
+
+<!-- 찜 삭제 -->
+<delete id="deleteWant" parameterType="mul.cam.a.dto.WantDto">
+	delete from wantpackage
+	where id=#{id} and locid=#{locid} and seq=#{seq}
+</delete>
+
+<!-- 찜리스트 가져오기 -->
+<select id="getWant" parameterType="String" resultType="mul.cam.a.dto.WantDto">
+		select id, locid, seq, title, imgurl
+		from wantpackage
+		where id=#{id}
+</select>
+
+<!-- 스크랩리스트 가져오기 -->
+<select id="getScrap" parameterType="String" resultType="mul.cam.a.dto.ScrapDto">
+		select id, seq
+		from scrap
+		where id=#{id}
+</select>
+
+<!-- 스크랩 삭제 -->
+<delete id="deleteScrap" parameterType="mul.cam.a.dto.ScrapDto">
+	delete from scrap
+	where id=#{id} and seq=#{seq}
+</delete>
+
+<!-- 스크랩 수 감소 -->
+<update id="scrapcountdown" parameterType="Integer">
+	update commubbs
+	set scrapcount=scrapcount-1
+	where seq=#{seq}
+</update>
+
+<!-- 내가쓴글 가져오기 -->
+<select id="mybbslist" parameterType="String" resultType="mul.cam.a.dto.CommuDto">
+	select *
+	from commubbs
+	where id=#{id}
+</select>
+
+<!-- 정보수정 -->
+<update id="updateMember" parameterType="mul.cam.a.dto.MemberDto">
+	update members
+	set pwd=#{pwd}, name=#{name}, bdate=#{bdate},
+	phone=#{phone}, email=#{email}
+	where id=#{id}
+</update>
+
+<!-- 결제내역 가져오기 -->
+<select id="getPay" parameterType="String" resultType="mul.cam.a.dto.PaymentDto">
+		select locid, seq, pImg, pName, pPrice, approvalNumber
+		from payments
+		where bid=#{bid}
+</select>
+
+</mapper>

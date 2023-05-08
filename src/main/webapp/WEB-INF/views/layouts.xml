@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+       
+<tiles-definitions>
+
+
+
+<!-- main -->
+<definition name="main" template="/WEB-INF/views/layout-tiles.jsp">
+	<put-attribute name="header" value="/WEB-INF/views/header.jsp"/>
+	<put-attribute name="menu" value="/WEB-INF/views/main/menu.jsp"/>
+	<put-attribute name="content" value="/WEB-INF/views/main/content.jsp"/>
+	<put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+</definition>
+
+<definition name="package" extends="main">
+	<put-attribute name="content" value="/WEB-INF/views/main/package.jsp"/>
+</definition>
+
+<definition name="packagelist" extends="main">
+	<put-attribute name="content" value="/WEB-INF/views/main/packagelist.jsp"/>
+</definition>
+
+<definition name="packagedetail" extends="main">
+	<put-attribute name="content" value="/WEB-INF/views/main/packagedetail.jsp"/>
+</definition>
+
+<definition name="message" extends="main">  <!-- content를 바꿀 필요는 없지만 단순 이동 목적. message.jsp에서 보여줄 것은 없음 -->
+	<put-attribute name="content" value="/WEB-INF/views/message/message.jsp"/>
+</definition>
+
+
+
+
+<!-- 로그인 tiles1사용 -->
+<definition name="login" template="/WEB-INF/views/layout-tiles1.jsp">
+	<put-attribute name="banner_1" value="/WEB-INF/views/login/banner_1.jsp"/>
+	<put-attribute name="banner_2" value="/WEB-INF/views/login/banner_2.jsp"/>
+	<put-attribute name="content" value="/WEB-INF/views/login/login.jsp"/>
+	<put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+</definition>
+
+<definition name="regi" extends="login">
+	<put-attribute name="content" value="/WEB-INF/views/login/regi.jsp"/>
+</definition>
+
+<definition name="find" extends="login">
+	<put-attribute name="content" value="/WEB-INF/views/login/find.jsp"/>
+</definition>
+
+
+
+
+
+
+<!-- commu -->
+<definition name="commuhome" template="/WEB-INF/views/layout-tiles.jsp">
+	<put-attribute name="header" value="/WEB-INF/views/header.jsp"/>
+	<put-attribute name="menu" value="/WEB-INF/views/main/commumenu.jsp"/>
+	<put-attribute name="content" value="/WEB-INF/views/main/commuhome.jsp"/>
+	<put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+</definition>
+
+<definition name="commulist" extends="commuhome">
+	<put-attribute name="content" value="/WEB-INF/views/main/commulist.jsp"/>
+</definition>
+
+<definition name="commuwrite" extends="commuhome">
+	<put-attribute name="content" value="/WEB-INF/views/main/commuwrite.jsp"/>
+</definition>
+
+<definition name="commudetail" extends="commuhome">
+	<put-attribute name="content" value="/WEB-INF/views/main/commudetail.jsp"/>
+</definition>
+
+<definition name="commuupdate" extends="commuhome">
+	<put-attribute name="content" value="/WEB-INF/views/main/commuupdate.jsp"/>
+</definition>
+
+
+
+
+
+<!-- mypage -->
+<definition name="mypage" template="/WEB-INF/views/layout-tiles2.jsp">
+	<put-attribute name="header" value="/WEB-INF/views/detail/secondheader.jsp"/>
+	<put-attribute name="menu" value="/WEB-INF/views/detail/mypagemenu.jsp"/>
+	<put-attribute name="content" value="/WEB-INF/views/detail/mypage.jsp"/>
+	<put-attribute name="banner" value="/WEB-INF/views/login/banner_2.jsp"/>
+	<put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+</definition>
+
+<definition name="mypageinfo" extends="mypage">
+	<put-attribute name="content" value="/WEB-INF/views/detail/mypageinfo.jsp"/>
+</definition>
+
+<definition name="mypagewant" extends="mypage">
+	<put-attribute name="content" value="/WEB-INF/views/detail/mypagewant.jsp"/>
+</definition>
+
+<definition name="mypagescrap" extends="mypage">
+	<put-attribute name="content" value="/WEB-INF/views/detail/mypagescrap.jsp"/>
+</definition>
+
+<definition name="mypagemybbs" extends="mypage">
+	<put-attribute name="content" value="/WEB-INF/views/detail/mypagemybbs.jsp"/>
+</definition>
+
+<definition name="infoupdate" extends="login">
+	<put-attribute name="content" value="/WEB-INF/views/detail/infoupdate.jsp"/>
+</definition>
+
+
+
+
+
+
+
+<!-- payment (결제창으로 이동) -->
+<definition name="payment" template="/WEB-INF/views/layout-tiles-payment.jsp">
+	<put-attribute name="header" value="/WEB-INF/views/payment/payment-header.jsp"/>
+	<put-attribute name="content" value="/WEB-INF/views/payment/payment.jsp"/>
+	<put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+</definition>
+
+<!-- paymentAf (결제 결과창으로 이동) -->
+<definition name="paymentAf" template="/WEB-INF/views/layout-tiles-payment.jsp">
+	<put-attribute name="header" value="/WEB-INF/views/payment/payment-header.jsp"/>
+	<put-attribute name="content" value="/WEB-INF/views/payment/paymentAf.jsp"/>
+	<put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
+</definition>
+
+
+</tiles-definitions>

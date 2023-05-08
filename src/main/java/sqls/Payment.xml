@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper 존재 -->
+
+<mapper namespace="Payment">
+ 
+<insert id="addPayment" parameterType="mul.cam.a.dto.PaymentDto">
+
+	insert into payments(locid, seq, pImg, pName, pPrice, bid, bEmail, bName, bTel, bAddr, approvalNumber, imp_uid, merchant_uid)
+	values(#{locid}, #{seq}, #{pImg}, #{pName}, #{pPrice}, #{bid}, #{bEmail}, #{bName}, #{bTel}, #{bAddr}, #{approvalNumber}, #{imp_uid}, #{merchant_uid})
+
+</insert>
+
+</mapper>

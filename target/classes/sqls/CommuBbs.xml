@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Bbs">
+
+<!-- 글 쓰기(작성한 글 등록)  -->
+<insert id="writeBbs" parameterType="mul.cam.a.dto.CommuDto">
+	insert into commubbs(id, category, ref, step, depth, title, content, wdate, filename, newfilename, del, readcount, scrapcount, likecount)
+	values(#{id}, #{category}, (select ifnull(max(ref),0) + 1 from commubbs b), 0, 0, 
+			#{title}, #{content}, now(), #{filename}, #{newfilename}, 0, 0, 0, 0)
+</insert>
+
+<!-- 게시판에 나타낼 정보를 담은 객체를 얻는다. -->
+<select id="bbslist" parameterType="mul.cam.a.dto.CommuParam"
+	resultType="mul.cam.a.dto.CommuDto">
+	
+	select *
+	from 
+		(select row_number()over(order by ref desc, step asc) as rnum,
+			seq, id, category, ref, step, depth, title, content, wdate, filename, newfilename, del, readcount, scrapcount, likecount
+		 from commubbs
+		 where del=0 and category=#{category}	
+		 <if test="choice != null and choice != '' and search != null and search != '' ">
+		 	<if test="choice == 'title'">
+		 		and title like concat('%', #{search}, '%')  
+		 	</if>
+		 	<if test="choice == 'content'">
+		 		and content like concat('%', #{search}, '%') 
+		 	</if>
+		 	<if test="choice == 'writer'">
+		 		and id=#{search} 
+		 	</if>
+		 </if>
+		order by ref desc, step asc) a
+	where rnum between #{start} and #{end}
+
+</select>
+
+<!-- 글의 총 개수 -->
+<select id="getAllBbs" parameterType="mul.cam.a.dto.CommuParam" resultType="Integer">
+	
+	select ifnull(count(*), 0)
+	from commubbs
+	where 1=1 and del=0
+	<if test="choice != null and choice != '' and search != null and search != '' ">
+		 	<if test="choice == 'title'">
+		 		 and title like concat('%', #{search}, '%') and del=0
+		 	</if>
+		 	<if test="choice == 'content'">
+		 		 and content like concat('%', #{search}, '%') and del=0
+		 	</if>
+		 	<if test="choice == 'writer'">
+		 		 and id=#{search} and del=0
+		 	</if>
+	 </if>
+	 and category=#{category}
+</select>
+
+
+<!-- 상세 글 보기 -->
+<select id="getBbs" parameterType="Integer"
+	resultType="mul.cam.a.dto.CommuDto"> <!-- seq가 매개변수 이므로 Integer -->
+	select *
+	from commubbs
+	where seq=${seq}
+
+</select>
+
+<!-- 상세 글 수정 -->
+<update id="updateBbs" parameterType="mul.cam.a.dto.CommuDto">
+	update commubbs
+	set title=#{title}, content=#{content}, wdate=now()
+	where seq=${seq}
+</update>
+
+<!-- 상세 글 삭제 -->
+<update id="deleteBbs" parameterType="mul.cam.a.dto.CommuDto">
+	update commubbs
+	set del=1
+	where seq=${seq}
+</update>
+
+
+<!-- 조회수 증가 -->
+<update id="readcount" parameterType="Integer">
+	update commubbs
+	set readcount=readcount+1
+	where seq=${seq}
+</update>
+
+<!-- 추천수를 기준으로 (내림차순 정렬) -> 상위 세 항목 인기글로 뽑아줌 -->
+<select id="recommendList" resultType="mul.cam.a.dto.CommuDto">
+	select *
+	from commubbs
+	order by likecount desc
+	limit 0, 5
+
+</select>
+
+<!-- 게시된 시간을 기준으로 (내림차순 정렬) -> 상위 세 항목 최근글로 뽑아줌 -->
+<select id="recentList" resultType="mul.cam.a.dto.CommuDto">
+	select *
+	from commubbs
+	order by wdate desc
+	limit 0, 5
+
+</select>
+
+<!-- 댓글 작성하기 -->
+<insert id="commentWrite" parameterType="mul.cam.a.dto.CommuComment">
+	insert into commucomment(seq, id, content, wdate)
+	values(#{seq}, #{id}, #{content}, now())
+</insert>
+
+<!-- 작성된 댓글 나타내기 -->
+<!-- 해당 글 번호(seq)에 대한 댓글만을 나타내야 하므로 parameterType은Integer -->
+<select id="commentList" parameterType="Integer" resultType="mul.cam.a.dto.CommuComment"> 
+	select seq, id, content, wdate
+	from commucomment
+	where seq=#{seq}
+	order by wdate desc
+</select>
+
+<!-- 추천수 증가 -->
+<update id="likecount" parameterType="Integer">
+	update commubbs
+	set likecount=likecount+1
+	where seq=${seq}
+</update>
+
+
+<!-- 스크랩 수 증가 -->
+<update id="scrapcount" parameterType="Integer">
+	update commubbs
+	set scrapcount=scrapcount+1
+	where seq=#{seq}
+</update>
+
+<!-- 스크랩 추가 -->
+<insert id="scrapadd" parameterType="mul.cam.a.dto.ScrapDto">
+	insert into scrap(seq, id)
+	values(#{seq}, #{id})
+</insert>
+
+</mapper>
+	
